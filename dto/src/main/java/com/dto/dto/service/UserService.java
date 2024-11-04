@@ -30,8 +30,7 @@ public class UserService {
     }
 
     public void saveUser(User user, String roleName) {
-        Role role = new Role();
-        role.setName(roleName);
+        Role role = roleRepository.findByName(roleName);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Set.of(role));
@@ -43,9 +42,7 @@ public class UserService {
     public void updateUser(User updatedUser, String roleName) {
         User existingUser = userRepository.findById(updatedUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        Role role = new Role();
-        role.setName(roleName);
+        Role role = roleRepository.findByName(roleName);
         updatedUser.setRoles(Set.of(role));
 
         if (!updatedUser.getPassword().equals(existingUser.getPassword())) {
