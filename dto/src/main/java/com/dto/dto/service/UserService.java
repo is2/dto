@@ -47,8 +47,6 @@ public class UserService {
 
         if (!passwordEncoder.matches(updatedUser.getPassword(), existingUser.getPassword())) {
             updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        } else {
-            updatedUser.setPassword(existingUser.getPassword());
         }
 
         System.out.println(role.getName());
