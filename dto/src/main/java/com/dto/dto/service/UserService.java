@@ -4,6 +4,7 @@ import com.dto.dto.model.Role;
 import com.dto.dto.model.User;
 import com.dto.dto.repository.RoleRepository;
 import com.dto.dto.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -24,11 +25,11 @@ public class UserService {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Transactional
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
-
+    @Transactional
     public void saveUser(User user, String roleName) {
         Role role = roleRepository.findByName(roleName);
 
@@ -39,6 +40,7 @@ public class UserService {
         System.out.println(user.getPassword());
         userRepository.save(user);
     }
+    @Transactional
     public void updateUser(User updatedUser, String roleName) {
         User existingUser = userRepository.findById(updatedUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -54,13 +56,19 @@ public class UserService {
 
         userRepository.save(updatedUser);
     }
-
+    @Transactional
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-
+    @Transactional
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        for (Role role : user.getRoles()) {
+            role.getUsers().remove(user);
+        }
+        user.getRoles().clear();
+        userRepository.delete(user);
     }
 }
 
