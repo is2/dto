@@ -40,13 +40,24 @@ public class UserService {
         System.out.println(user.getPassword());
         userRepository.save(user);
     }
-    public void updateUser(User user, String roleName) {
+    public void updateUser(User updatedUser, String roleName) {
+        User existingUser = userRepository.findById(updatedUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
         Role role = new Role();
         role.setName(roleName);
-        user.setRoles(Set.of(role));
+        updatedUser.setRoles(Set.of(role));
+
+        if (!updatedUser.getPassword().equals(existingUser.getPassword())) {
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        } else {
+            updatedUser.setPassword(existingUser.getPassword());
+        }
+
         System.out.println(role.getName());
-        System.out.println(user.getUsername());
-        userRepository.save(user);
+        System.out.println(updatedUser.getUsername());
+
+        userRepository.save(updatedUser);
     }
 
     public Optional<User> findByUsername(String username) {
