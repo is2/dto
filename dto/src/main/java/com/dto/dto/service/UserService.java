@@ -45,7 +45,7 @@ public class UserService {
         Role role = roleRepository.findByName(roleName);
         updatedUser.setRoles(Set.of(role));
 
-        if (!updatedUser.getPassword().equals(existingUser.getPassword())) {
+        if (!passwordEncoder.matches(updatedUser.getPassword(), existingUser.getPassword())) {
             updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         } else {
             updatedUser.setPassword(existingUser.getPassword());
