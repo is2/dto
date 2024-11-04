@@ -47,7 +47,7 @@ public class AdminRestController {
     }
     @PutMapping("/edit")
     public ResponseEntity<User> editUser(@RequestBody User user, @RequestParam("rolee") String roleName) {
-        userService.saveUser(user, roleName);
+        userService.updateUser(user, roleName);
         return ResponseEntity.ok(user);
     }
     @DeleteMapping("/delete/{id}")

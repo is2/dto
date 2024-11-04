@@ -29,7 +29,6 @@ public class AdminController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User currentUser = userService.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
         model.addAttribute("currentUser", currentUser);
         return "admin_panel";
     }
@@ -42,7 +41,7 @@ public class AdminController {
 
     @PostMapping("/edit")
     public String editUser(@ModelAttribute("user") User user, @RequestParam("rolee") String roleName) {
-        userService.saveUser(user, roleName);
+        userService.updateUser(user, roleName);
         return "redirect:/admin";
     }
 

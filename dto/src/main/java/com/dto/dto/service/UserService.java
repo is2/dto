@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -33,11 +34,21 @@ public class UserService {
         role.setName(roleName);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(role);
+        user.setRoles(Set.of(role));
+        System.out.println(role.getName());
+        System.out.println(user.getUsername());
+        System.out.println(user.getPassword());
+        userRepository.save(user);
+    }
+    public void updateUser(User user, String roleName) {
+        Role role = new Role();
+        role.setName(roleName);
+        user.setRoles(Set.of(role));
         System.out.println(role.getName());
         System.out.println(user.getUsername());
         userRepository.save(user);
     }
+
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

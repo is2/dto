@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
 
 
 @AllArgsConstructor
@@ -36,17 +37,17 @@ public class Role {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
+
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
-
-    @OneToOne(mappedBy = "role")
-    private User user;
-
-
 }
 
