@@ -15,10 +15,10 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner loadRoles(RoleRepository roleRepository) {
         return args -> {
-                if (!roleRepository.findByName("ROLE_USER").equals("ROLE_USER")) {
+                if (roleRepository.findByName("ROLE_USER")==null) {
                     roleRepository.save(new Role(null, "ROLE_USER", null));
                 }
-                if (!roleRepository.findByName("ROLE_ADMIN").equals("ROLE_ADMIN")) {
+                if (roleRepository.findByName("ROLE_ADMIN")==null) {
                     roleRepository.save(new Role(null, "ROLE_ADMIN", null));
                 }
 
