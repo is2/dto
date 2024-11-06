@@ -53,10 +53,15 @@ public class UserService {
 
         updatedUser.setRoles(userRoles);
 
-        if (!passwordEncoder.matches(updatedUser.getPassword(), existingUser.getPassword())) {
+        if (updatedUser.getPassword().equals(existingUser.getPassword())) {
+            System.out.println("Match");
+        }else {
+            System.out.println("Not match");
             updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
         System.out.println(updatedUser.getUsername());
+        System.out.println(updatedUser.getPassword());
+        System.out.println(existingUser.getPassword());
 
         userRepository.save(updatedUser);
     }
