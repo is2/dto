@@ -41,12 +41,12 @@ public class AdminRestController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
     @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody User user, @RequestParam("rolee") String roleName) {
+    public ResponseEntity<User> addUser(@RequestBody User user, @RequestParam("rolee") List<String> roleName) {
         userService.saveUser(user, roleName);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
     @PutMapping("/edit")
-    public ResponseEntity<User> editUser(@RequestBody User user, @RequestParam("rolee") String roleName) {
+    public ResponseEntity<User> editUser(@RequestBody User user, @RequestParam("rolee") List<String> roleName) {
         userService.updateUser(user, roleName);
         return ResponseEntity.ok(user);
     }

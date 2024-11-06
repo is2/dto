@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class LoginRestController {
@@ -36,7 +38,7 @@ public class LoginRestController {
 
     @PostMapping("/registration")
     public ResponseEntity<String> addNewUser(@RequestBody User user,
-                                             @RequestParam("rolee") String roleName) {
+                                             @RequestParam("rolee") List<String> roleName) {
         userService.saveUser(user, roleName);
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
     }

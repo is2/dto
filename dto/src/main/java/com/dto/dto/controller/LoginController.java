@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 
 
 @Controller
@@ -38,7 +39,7 @@ public class LoginController {
 
     @PostMapping("/registration")
     public String addNewUser(@ModelAttribute("userFormRegistration") User user,
-                             @RequestParam("rolee") String roleName) {
+                             @RequestParam("rolee") List<String> roleName) {
 
         userService.saveUser(user, roleName);
         return "redirect:/login";

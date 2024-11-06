@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @Controller
@@ -35,13 +36,13 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public String addUser(@ModelAttribute("user") User user, @RequestParam("rolee") String roleName) {
+    public String addUser(@ModelAttribute("user") User user, @RequestParam("rolee") List<String> roleName) {
         userService.saveUser(user, roleName);
         return "redirect:/admin";
     }
 
     @PostMapping("/edit")
-    public String editUser(@ModelAttribute("user") User user, @RequestParam("rolee") String roleName) {
+    public String editUser(@ModelAttribute("user") User user, @RequestParam("rolee") List<String> roleName) {
         userService.updateUser(user, roleName);
         return "redirect:/admin";
     }

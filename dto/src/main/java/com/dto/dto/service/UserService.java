@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,28 +31,31 @@ public class UserService {
         return userRepository.findAll();
     }
     @Transactional
-    public void saveUser(User user, String roleName) {
-        Role role = roleRepository.findByName(roleName);
+    public void saveUser(User user, List<String> roles) {
 
+        Set<Role> userRoles = roles.stream()
+                .map(roleRepository::findByName)
+                .collect(Collectors.toSet());
+        user.setRoles(userRoles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Set.of(role));
-        System.out.println(role.getName());
+
         System.out.println(user.getUsername());
         System.out.println(user.getPassword());
         userRepository.save(user);
     }
     @Transactional
-    public void updateUser(User updatedUser, String roleName) {
+    public void updateUser(User updatedUser, List<String> roles) {
         User existingUser = userRepository.findById(updatedUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Role role = roleRepository.findByName(roleName);
-        updatedUser.setRoles(Set.of(role));
+        Set<Role> userRoles = roles.stream()
+                .map(roleRepository::findByName)
+                .collect(Collectors.toSet());
+
+        updatedUser.setRoles(userRoles);
 
         if (!passwordEncoder.matches(updatedUser.getPassword(), existingUser.getPassword())) {
             updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
-
-        System.out.println(role.getName());
         System.out.println(updatedUser.getUsername());
 
         userRepository.save(updatedUser);
